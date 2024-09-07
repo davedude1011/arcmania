@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { getCharacterData } from "~/server/characterCreation"
 import Link from "next/link"
-import { UserButton } from "@clerk/nextjs"
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs"
 import InventoryElement from "./components/inventory"
 import { getUsersJourneys } from "~/server/journey"
 import { LuInfo } from "react-icons/lu"
@@ -42,6 +42,10 @@ export default function Page() {
 
   return (
     <div className="w-screen h-screen text-white p-12 bg-bgMain overflow-y-auto">
+      <SignedOut>
+        <SignInButton />
+      </SignedOut>
+      <SignedIn>
       {
           characterData == "none" &&
           <Link href={"/character-creation"} className="border p-2 rounded-md px-4 hover:shadow-md transition-all">
@@ -120,6 +124,7 @@ export default function Page() {
             </div>
           )
       }
+      </SignedIn>
     </div>
   )
 }
