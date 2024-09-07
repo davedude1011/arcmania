@@ -4,6 +4,7 @@
 import { sql } from "drizzle-orm";
 import {
   index,
+  json,
   pgTableCreator,
   serial,
   timestamp,
@@ -16,13 +17,16 @@ import {
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const createTable = pgTableCreator((name) => `arcmania_${name}`);
+export const createCharacterDataTable = pgTableCreator(() => `arcmania_character_data`);
+export const createUserDataTable = pgTableCreator(() => `arcmania_user_data`);
+export const createJourneyDataTable = pgTableCreator(() => `arcmania_journey_data`);
 
-export const posts = createTable(
-  "post",
+export const characterData = createCharacterDataTable(
+  "character_data",
   {
     id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }),
+    userId: varchar("user_id"),
+    characterData: json("character_data"),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -30,7 +34,35 @@ export const posts = createTable(
       () => new Date()
     ),
   },
-  (example) => ({
-    nameIndex: index("name_idx").on(example.name),
-  })
+);
+
+export const userData = createUserDataTable(
+  "user_data",
+  {
+    id: serial("id").primaryKey(),
+    userId: varchar("user_id"),
+    journeyIdArray: json("journey_id_array"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+      () => new Date()
+    ),
+  },
+);
+
+export const journeyData = createJourneyDataTable(
+  "journey_data",
+  {
+    id: serial("id").primaryKey(),
+    journeyId: varchar("journey_id"),
+    journeyTitle: varchar("journey_title"),
+    journeyData: json("journey_data"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+      () => new Date()
+    ),
+  },
 );
