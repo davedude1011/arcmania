@@ -48,17 +48,17 @@ export default function Page() {
 
     return (
         <div className="bg-bgMain w-screen h-screen text-white flex items-center justify-center">
-            <div className="flex flex-col border rounded-lg p-8 gap-8 flex-shrink min-w-[50%]">
+            <div className="flex flex-col border rounded-lg md:p-8 p-2 gamd:p-8 p-2 flex-shrink min-w-[50%]">
                 <SignedIn>
                     <div className="text-4xl font-bold text-center">World Building</div>
                     <div className="flex flex-col gap-2">
-                        <div className="flex flex-row justify-between gap-8 items-center">
+                        <div className="flex flex-row justify-between gamd:p-8 p-2 items-center">
                             <div className="text-xl font-thin">{journeyCreationData[questionIndex]?.question}</div>
                             <div className="text-sm">{questionIndex+1} of {journeyCreationData.length}</div>
                         </div>
                         <textarea disabled={isLoading} value={journeyCreationData[questionIndex]?.answer} onChange={(e) => {setAnswer(e.target.value)}} rows={5} className="resize-none hover:resize-y rounded-md border p-2 bg-transparent opacity-50 hover:opacity-100 focus:opacity-100 transition-all font-thin" placeholder="Type your answer."></textarea>
                     </div>
-                    <div className="flex flex-row gap-8">
+                    <div className="flex flex-row gamd:p-8 p-2">
                         {
                             questionIndex > 0 && questionIndex < journeyCreationData.length && (
                                 <button disabled={isLoading} className="flex flex-grow border rounded-md opacity-50 hover:opacity-100 py-2 justify-center transition-all hover:rounded-[50px]" onClick={() => {
@@ -88,7 +88,7 @@ export default function Page() {
                     </div>
                 </SignedIn>
                 <SignedOut>
-                    <div className="flex flex-col items-center gap-8">
+                    <div className="flex flex-col items-center gamd:p-8 p-2">
                         <div className="text-2xl font-bold">You need an account to create a character.</div>
                         <SignInButton></SignInButton>
                     </div>

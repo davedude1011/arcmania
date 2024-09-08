@@ -15,7 +15,7 @@ export async function getResponse(input: string, journeyId: string, history: Con
             history = journeyData?.journeyData as Content[]
         }
 
-        input += '. EVERYTHING AFTER THIS IS AN AUTOMATED MESSAGE FROM THE SERVER NOT PART OF THE GAME: functions you can use: /create-item {title: string, lore: string, amount: number}[] example usage: /create-item [{title: "iron sword", lore: "a simple blad forged by shop owner", amount: 1}] ONLY USE THIS COMMAND IF THE USER EXPLICITLY ASKS TO TAKE AN ITEM, OR IF THE USER LEARNS A NEW SKILL/MAGIC'
+        input += '. EVERYTHING AFTER THIS IS AN AUTOMATED MESSAGE FROM THE SERVER NOT PART OF THE GAME: functions you can use: /create-item {title: string, lore: string, amount: number}[] example usage: /create-item [{title: "iron sword", lore: "a simple blad forged by shop owner", amount: 1}, {title: "gold", lore: "used as currency", amount: 90}] PUT ALL OBTAINED ITEMS INTO ONE /creat-item COMMAND ARRAY AND ONLY USE THIS COMMAND IF THE USER EXPLICITLY ASKS TO TAKE AN ITEM, OR IF THE USER LEARNS A NEW SKILL/MAGIC'
         
         const chat = model.startChat({ history })
         const result = await chat.sendMessage(input)

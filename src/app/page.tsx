@@ -44,7 +44,7 @@ export default function Page() {
   })
 
   return (
-    <div className="w-screen h-screen text-white p-12 bg-bgMain overflow-y-auto">
+    <div className="w-screen h-screen text-white md:p-12 p-4 bg-bgMain overflow-y-auto">
       <SignedOut>
         <SignInButton />
       </SignedOut>
@@ -65,8 +65,8 @@ export default function Page() {
                   <div className="text-xl font-thin">lvl.{characterData.stats.level} {characterData.race}</div>
                 </div>
               </div>
-              <div className="flex flex-row justify-between gap-6">
-                <div className="flex flex-col gap-2 flex-grow w-1/3 p-12 border rounded-md">
+              <div className="flex flex-col md:flex-row justify-between gap-6">
+                <div className="flex flex-col gap-2 flex-grow md:w-1/3 md:p-12 p-4 border rounded-md">
                   <div className="text-2xl">Character Stats</div>
                   <div className="flex flex-col gap-0">
                     <div className="flex flex-row justify-between gap-6">
@@ -83,7 +83,7 @@ export default function Page() {
                     <progress value={characterData.stats.mana/characterData.stats.maxMana} />
                   </div>
                 </div>
-                <div className="flex flex-col w-fit p-12 gap-2 border rounded-md">
+                <div className="flex flex-col w-fit md:p-12 p-4 gap-2 border rounded-md">
                   <div className="text-2xl w-fit">Character Details</div>
                   <div className="font-thin max-w-2xl">
                     {characterData.details}
@@ -91,7 +91,7 @@ export default function Page() {
                 </div>
               </div>
               <InventoryElement inventoryData={characterData.inventory} />
-              <div className="flex flex-col gap-6 border rounded-md p-12">
+              <div className="flex flex-col gap-6 border rounded-md md:p-12 p-4">
                 <div className="flex flex-row justify-between gap-4 items-end">
                   <div className="text-2xl">Journeys</div>
                   <Link className="p-2 px-4 border rounded-md opacity-50 hover:opacity-100 transition-all" href={"/journey-creation"}>Create a Journey</Link>

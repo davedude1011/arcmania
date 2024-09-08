@@ -21,7 +21,7 @@ export default function Page() {
                 setJourneyTitle(response?.journeyTitle ?? "")
             })
             .catch((error) => console.log(error))
-    }, [])
+    }, [journeyId])
 
     const [characterData, setCharacterData] = useState(null as null|{name: string, race: string, stats: {level: number, health: number, maxHealth: number, mana: number, maxMana: number}, inventory: {title: string, type: string, lore: string, usage: string, rarity: string}[], details: string})
     function updateCharacterData() {
@@ -37,13 +37,13 @@ export default function Page() {
         updateCharacterData()
     }, [])
     return (
-        <div className="w-screen h-screen text-white p-12 bg-bgMain flex flex-col">
-            <div className="flex flex-col gap-12 flex-grow overflow-y-auto">
+        <div className="w-screen h-screen text-white md:p-12 p-4 bg-bgMain flex flex-col">
+            <div className="flex flex-col gamd:p-12 p-4 md:gap-12 md:text-base text-sm gap-4 flex-grow overflow-y-auto">
                 <div className="text-4xl font-bold">{journeyTitle}</div>
                 {
                     localHistory?.filter((_, index) => index != 0).map((chatComponent, index) => (
                         <div key={index} className={`flex ${chatComponent.role == "user" ? "justify-end text-end" : "justify-start text-start"} font-thin`}>
-                            <div>{chatComponent.parts[0]?.text}</div>
+                            <div className="w-[80%]">{chatComponent.parts[0]?.text}</div>
                         </div>
                     ))
                 }
@@ -54,7 +54,8 @@ export default function Page() {
                     .then((response) => {
                         if (response) {
                             setLocalHistory(response.history)
-                            response.functions.createItemData.forEach((itemData, itemIndex) => {
+                            response.functions.createItemData.forEach((itemData) => {
+                                /*
                                 for (let i = 0; i < itemData.amount; i++) {
                                     parseItemData(itemData)
                                         .then((itemDataResponse) => {
@@ -66,6 +67,17 @@ export default function Page() {
                                         })
                                         .catch((error) => console.log(error))
                                 }
+                                */
+                               
+                                parseItemData(itemData)
+                                .then((itemDataResponse) => {
+                                    addItemToCharacterInventory(itemDataResponse)
+                                        .then((_) => {
+                                            updateCharacterData()
+                                        })
+                                        .catch((error) => console.log(error))
+                                })
+                                .catch((error) => console.log(error))
                             })
                         }
                     })
