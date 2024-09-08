@@ -44,7 +44,7 @@ export default function InventoryElement({inventoryData, itemOnclick}: {inventor
                     </div>
                 )
             }
-            <div className="flex flex-wrap gap-8">
+            <div className="flex flex-wrap gap-2">
                 <Tooltip id='item-usage' style={{ maxWidth: "36rem", display: (isTooltips ? "block" : "none") }}></Tooltip>
                 {
                     inventoryData.map((itemData, index) => (

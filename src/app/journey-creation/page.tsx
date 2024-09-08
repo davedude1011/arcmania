@@ -3,7 +3,7 @@
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs"
 import { useRouter } from "next/navigation";
 import { useState } from "react"
-import { createJourney, createJourneyOpening } from "~/server/journey";
+import { createJourney } from "~/server/journeyCreation";
 
 export default function Page() {
     const router = useRouter();
@@ -77,13 +77,9 @@ export default function Page() {
                             questionIndex == journeyCreationData.length - 1 && (
                                 <button disabled={isLoading} className="flex flex-grow border rounded-md opacity-50 hover:opacity-100 py-2 justify-center transition-all hover:rounded-[50px]" onClick={() => {
                                     setIsLoading(true)
-                                    createJourneyOpening(journeyCreationData)
-                                        .then((response) => {
-                                            createJourney(response, journeyCreationData.find((data) => data.question == "What is the name of this new world?")?.answer??"new world")
-                                                .then((_) => {
-                                                    router.push("/")
-                                                })
-                                                .catch((error) => console.log(error))
+                                    createJourney(journeyCreationData, journeyCreationData.find((data) => data.question == "What is the name of this new world?")?.answer??"new world")
+                                        .then((_) => {
+                                            router.push("/")
                                         })
                                         .catch((error) => console.log(error))
                                 }}>Build World</button>

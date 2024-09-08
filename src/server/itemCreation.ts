@@ -1,6 +1,11 @@
 "use server"
 
+import { auth } from "@clerk/nextjs/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { getCharacterData } from "./characterCreation";
+import { db } from "./db";
+import { characterData } from "./db/schema";
+import { eq } from "drizzle-orm";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY??"");
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -14,5 +19,19 @@ export default async function parseItemData(itemData: {title: string, lore: stri
     console.log(stringifiedData)
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return JSON.parse(stringifiedData)
+    return JSON.parse(stringifiedData) as {title: string, type: string, lore: string, usage: string, rarity: string}
+}
+
+export async function addItemToCharacterInventory(itemData: {title: string, type: string, lore: string, usage: string, rarity: string}) {
+    const user = auth()
+    if (user?.userId) {
+        const characterDataArray = await getCharacterData()
+        if (characterDataArray && characterDataArray != "none") {
+            const characterInventory = characterDataArray.inventory
+            characterInventory.push(itemData)
+            characterDataArray.inventory = characterInventory
+
+            await db.update(characterData).set({ characterData: characterDataArray}).where(eq(characterData.userId, user.userId))
+        }
+    }
 }

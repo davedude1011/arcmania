@@ -10,7 +10,7 @@ function generateRandomString() {
     return result;
 }
 
-export default function TaggableInput({inventoryData}: {inventoryData: {title: string, type: string, lore: string, usage: string, rarity: string}[]}) {
+export default function TaggableInput({inventoryData, submitFunction}: {inventoryData: {title: string, type: string, lore: string, usage: string, rarity: string}[], submitFunction: (input: string) => void}) {
     const [itemLinks, setItemLinks] = useState([] as [string, string][])
     const [inputValue, setInputValue] = useState("")
     const inputRef = useRef<HTMLTextAreaElement>(null)
@@ -53,7 +53,7 @@ export default function TaggableInput({inventoryData}: {inventoryData: {title: s
     const devData = false
 
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 w-full">
             {
                 devData && (
                     <>
@@ -66,7 +66,12 @@ export default function TaggableInput({inventoryData}: {inventoryData: {title: s
                     </>
                 )
             }
-            <textarea ref={inputRef} value={inputValue} onChange={(e) => {setInputValue(e.target.value)}} rows={3} className="flex bg-transparent resize-none hover:resize-y opacity-50 hover:opacity-100 focus:opacity-100 rounded-md border transition-all p-2"></textarea>
+            <textarea ref={inputRef} value={inputValue} placeholder="Press enter to submit..." onChange={(e) => {setInputValue(e.target.value)}} rows={3} className="flex bg-transparent resize-none hover:resize-y opacity-50 hover:opacity-100 focus:opacity-100 rounded-md border transition-all p-2" onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                    submitFunction(formattedText)
+                    setInputValue("")
+                }
+            }}></textarea>
             <InventoryElement {...{inventoryData, itemOnclick}} />
         </div>
     )

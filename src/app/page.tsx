@@ -5,11 +5,14 @@ import { getCharacterData } from "~/server/characterCreation"
 import Link from "next/link"
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs"
 import InventoryElement from "./components/inventory"
-import { getUsersJourneys } from "~/server/journey"
+import { getUsersJourneys } from "~/server/journeyCreation"
 import { LuInfo } from "react-icons/lu"
 import { journeyData } from "~/server/db/schema"
+import { useRouter } from "next/navigation"
 
 export default function Page() {
+  const router = useRouter()
+
   const [characterData, setCharacterData] = useState(null as null|"none"|{name: string, race: string, stats: {level: number, health: number, maxHealth: number, mana: number, maxMana: number}, inventory: {title: string, type: string, lore: string, usage: string, rarity: string}[], details: string})
   useEffect(() => {
     getCharacterData()
@@ -21,7 +24,7 @@ export default function Page() {
     id: number;
     createdAt: Date;
     updatedAt: Date | null;
-    journeyData: unknown;
+    journeyData: {role: string, parts: {text: string}[]}[];
     journeyId: string | null;
     journeyTitle: string | null;
   }[])
@@ -35,7 +38,7 @@ export default function Page() {
     id: number;
     createdAt: Date;
     updatedAt: Date | null;
-    journeyData: unknown;
+    journeyData: {role: string, parts: {text: string}[]}[];
     journeyId: string | null;
     journeyTitle: string | null;
   })
@@ -94,21 +97,23 @@ export default function Page() {
                   <Link className="p-2 px-4 border rounded-md opacity-50 hover:opacity-100 transition-all" href={"/journey-creation"}>Create a Journey</Link>
                 </div>
                 {
-                  selectedInfoJourney.journeyTitle && (
+                  (selectedInfoJourney?.journeyTitle||selectedInfoJourney?.journeyData?.[1]?.parts[0]?.text) && (
                     <div className="flex flex-col gap-2">
                       <div className="flex flex-row gap-2 items-center">
-                        <div className="text-2xl">{selectedInfoJourney.journeyTitle}</div>
-                        <div className="text-sm font-thin opacity-50">( {selectedInfoJourney.createdAt.toLocaleString()} )</div>
-                        <div className="text-sm font-thin opacity-50">( {selectedInfoJourney.journeyId} )</div>
+                        <div className="text-2xl">{selectedInfoJourney?.journeyTitle}</div>
+                        <div className="text-sm font-thin opacity-50">( {selectedInfoJourney?.createdAt.toLocaleString()} )</div>
+                        <div className="text-sm font-thin opacity-50">( {selectedInfoJourney?.journeyId} )</div>
                       </div>
-                      <div className="font-thin">{(selectedInfoJourney.journeyData as {role: string, parts: {text: string}[]}[])[0]?.parts[0]?.text}</div>
+                      <div className="font-thin">{selectedInfoJourney.journeyData.find((journeyChatHistory) => journeyChatHistory.role == "model")?.parts[0]?.text}</div>
                     </div>
                   )
                 }
                 <div className="flex flex-wrap gap-4">
                   {
                     usersJourneys.map((journey) => (
-                      <button className="p-2 border rounded-md opacity-50 hover:opacity-100 flex-grow justify-between flex flex-row transition-all" key={journey.journeyId}>
+                      <button className="p-2 border rounded-md opacity-50 hover:opacity-100 flex-grow justify-between flex flex-row transition-all" onClick={() => {
+                        router.push("/journey?journeyId=" + journey.journeyId)
+                      }} key={journey.journeyId}>
                         <button className="opacity-50 hover:opacity-100 transition-all" onClick={(e) => {
                           e.stopPropagation()
                           setSelectedInfoJourney(journey)
