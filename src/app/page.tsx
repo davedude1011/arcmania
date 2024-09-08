@@ -97,7 +97,7 @@ export default function Page() {
                   <Link className="p-2 px-4 border rounded-md opacity-50 hover:opacity-100 transition-all" href={"/journey-creation"}>Create a Journey</Link>
                 </div>
                 {
-                  (selectedInfoJourney?.journeyTitle||selectedInfoJourney?.journeyData?.[1]?.parts[0]?.text) && (
+                  (selectedInfoJourney?.journeyData?.[1]?.parts[0]?.text) && (
                     <div className="flex flex-col gap-2">
                       <div className="flex flex-row gap-2 items-center">
                         <div className="text-2xl">{selectedInfoJourney?.journeyTitle}</div>
